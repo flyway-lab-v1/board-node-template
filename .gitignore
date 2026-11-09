@@ -1,0 +1,5 @@
+# 각자 PC의 접속 정보 (예시 파일만 공유한다)
+flyway.toml
+.env
+node_modules/
+dist/

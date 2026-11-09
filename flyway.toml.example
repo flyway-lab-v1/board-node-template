@@ -1,0 +1,9 @@
+[environments.default]
+url = "jdbc:mysql://localhost:3306/board?allowPublicKeyRetrieval=true"
+user = "board_user"
+password = "CHANGE_ME"
+
+[flyway]
+environment = "default"
+locations = ["filesystem:db/migration"]
+outOfOrder = true
