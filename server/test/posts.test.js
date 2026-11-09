@@ -1,6 +1,6 @@
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import mysql from "mysql2/promise";
 import { createApp } from "../src/app.js";
@@ -19,10 +19,11 @@ before(async () => {
   await admin.query(`CREATE DATABASE \`${TEST_DB}\``);
   await admin.end();
   // 팀과 같은 마이그레이션 파일로 테스트 DB를 만든다
-  execFileSync("flyway", [
-    `-url=jdbc:mysql://${conn.host}:${conn.port}/${TEST_DB}?allowPublicKeyRetrieval=true`,
-    "migrate",
-  ], { cwd: fileURLToPath(new URL("../..", import.meta.url)), shell: true, stdio: "ignore" });
+  // Windows의 flyway는 .cmd 파일이라 셸로 실행한다. 인자를 따로 넘기면 Node가 DEP0190 경고를 내므로 명령 한 줄로 넘긴다.
+  execSync(
+    `flyway "-url=jdbc:mysql://${conn.host}:${conn.port}/${TEST_DB}?allowPublicKeyRetrieval=true" migrate`,
+    { cwd: fileURLToPath(new URL("../..", import.meta.url)), stdio: "ignore" },
+  );
   pool = mysql.createPool({ ...conn, database: TEST_DB });
   await pool.query("INSERT INTO users (email, name) VALUES ('kim@example.com', '김팀원')");
   server = createApp(pool).listen(0);
