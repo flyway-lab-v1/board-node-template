@@ -8,6 +8,11 @@
 2. `server/.env.example`을 복사해 `server/.env`를 만들고 같은 비밀번호를 적습니다.
 3. 두 파일은 `.gitignore`에 들어 있어서 Git에 올라가지 않습니다.
 4. 의존성을 설치합니다: `npm install --prefix server`, `npm install --prefix client`
+5. `npm run db:migrate`로 테이블을 만든 뒤, 화면에서 글을 쓸 회원 한 명을 넣습니다. 마이그레이션은 빈 `users` 테이블만 만들고, 화면은 `userId: 1`로 글을 씁니다.
+   ```sql
+   INSERT INTO users (email, name) VALUES ('me@example.com', '나');
+   ```
+   MySQL에 접속해 `USE board;` 다음에 실행합니다. 회원이 없으면 글쓰기 아래에 「글을 저장하지 못했습니다」가 보입니다.
 
 ## 매일 쓰는 명령
 
